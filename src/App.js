@@ -10,6 +10,7 @@ import Signin from './components/Signin/Signin';
 
 import 'tachyons';
 import './App.css';
+import Register from './components/Register/Register';
 
 const app = new Clarifai.App({
   apiKey: 'ec7f6e50d4034297a14c9f4231a0a0b8'
@@ -39,7 +40,8 @@ class App extends Component {
       input: '',
       imageUrl: '',
       box: {},
-      route: 'signin'
+      route: 'signin',
+      isLoggedIn: false
     }
   }
 
@@ -77,21 +79,22 @@ class App extends Component {
   }
 
   onRouteChange = (route) => {
+    route === 'home' ? this.setState({ isLoggedIn: true }) : this.setState({ isLoggedIn: false });
     this.setState({ route: route });
   }
 
   render() {
-    const { imageUrl, box } = this.state;
+    const { imageUrl, box, route, isLoggedIn } = this.state;
 
     return (
       <div className="App">
         <Particles params={particlesParams} className="particles"/>
-        <Navigation onRouteChange={this.onRouteChange} />
+        <Navigation onRouteChange={this.onRouteChange} isLoggedIn={isLoggedIn} />
         
         { 
-          this.state.route === 'signin'
-          ? <Signin onRouteChange={this.onRouteChange} />
-          : <div>
+          route === 'home'
+          ?
+          <div>
             <Logo />
             <Rank />
             <ImageLinkForm 
@@ -99,6 +102,11 @@ class App extends Component {
               onButtonSubmit={this.onButtonSubmit} />
             <FaceRecognition imageUrl={imageUrl} box={box} />
           </div>
+          : (
+            route === 'signin'
+            ? <Signin onRouteChange={this.onRouteChange} />
+            : <Register onRouteChange={this.onRouteChange} />
+          )
         }
       </div>
     );
