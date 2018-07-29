@@ -52,6 +52,20 @@ class FaceRecognition extends Component {
       )
       .then(response => this.displayFaceBox(this.calculateFaceLocation(response)))
       .catch(err => console.log(err));
+
+    fetch('http://localhost:3003/entries', {
+      method: 'put',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: this.props.user.id
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.user) {
+          this.props.loadUser(data.user);
+        }
+      });
   }
 
   render() {
