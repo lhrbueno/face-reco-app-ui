@@ -31,7 +31,14 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      isLoggedIn: false
+      isLoggedIn: false,
+      user: {
+        id: '',
+        name: '',
+        email: '',
+        entries: 0,
+        joined: ''
+      }
     }
   }
 
@@ -43,8 +50,20 @@ class App extends Component {
     this.setState({ isLoggedIn: false });
   }
 
+  loadUser = (user) => {
+    this.setState({
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        entries: user.entries,
+        joined: user.joined
+      }
+    });
+  }
+
   render() {
-    const { isLoggedIn } = this.state;
+    const { isLoggedIn, user } = this.state;
 
     return (
       <div className="App">
@@ -53,9 +72,9 @@ class App extends Component {
     
         <Switch>
           <Route exact path='/' render={() => <Redirect to='/signin' /> } /> 
-          <Route exact path='/signin' render={() => <Signin onSignIn={this.onSignIn} />} />
-          <Route exact path='/register' component={Register} />
-          <Route exact path='/dashboard' component={FaceRecognition} />
+          <Route exact path='/signin' render={() => <Signin onSignIn={this.onSignIn} loadUser={this.loadUser} />} />
+          <Route exact path='/register' render={() => <Register onSignIn={this.onSignIn} loadUser={this.loadUser} />} />
+          <Route exact path='/profile/:id' render={() => <FaceRecognition user={user} />} />
         </Switch>
       </div>
     );
