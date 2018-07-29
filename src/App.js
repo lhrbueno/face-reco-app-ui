@@ -74,7 +74,7 @@ class App extends Component {
           <Route exact path='/' render={() => <Redirect to='/signin' /> } /> 
           <Route exact path='/signin' render={() => <Signin onSignIn={this.onSignIn} loadUser={this.loadUser} />} />
           <Route exact path='/register' render={() => <Register onSignIn={this.onSignIn} loadUser={this.loadUser} />} />
-          <Route exact path='/profile/:id' render={() => <FaceRecognition user={user} />} />
+          <Route exact path='/profile/:id' render={() => <FaceRecognition user={user} loadUser={this.loadUser} />} />
         </Switch>
       </div>
     );
