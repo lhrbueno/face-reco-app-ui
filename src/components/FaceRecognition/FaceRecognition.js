@@ -12,8 +12,8 @@ const app = new Clarifai.App({
 
 class FaceRecognition extends Component {
   
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       input: '',
       imageUrl: '',
@@ -60,7 +60,7 @@ class FaceRecognition extends Component {
     return (
       <div>
         <Logo />
-        <Rank />
+        <Rank name={this.props.user.name} entries={this.props.user.entries} />
         <ImageLinkForm 
           onInputChange={this.onInputChange} 
           onButtonSubmit={this.onButtonSubmit} 
