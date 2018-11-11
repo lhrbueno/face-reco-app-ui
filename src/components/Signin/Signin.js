@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 class Signin extends Component {
   constructor(props) {
@@ -20,8 +22,10 @@ class Signin extends Component {
 
   onSubmit = () => {
     const { email, password } = this.state;
+    const { onSignIn, loadUser, history } = this.props;
+
     fetch('http://localhost:3003/signin', {
-      method: 'post',
+      method: 'POST',
       headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify({
         email: email,
@@ -30,12 +34,15 @@ class Signin extends Component {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.user.id) { 
-          this.props.onSignIn();
-          this.props.loadUser(data.user);
-          this.props.history.push(`/profile/${data.user.id}`);
+        if (data.user !== undefined) {
+          onSignIn();
+          loadUser(data.user);
+          history.push(`/profile/${data.user.id}`);
         } else {
-          this.props.history.push('/signin');
+          document.getElementById('email-address').value = '';
+          document.getElementById('password').value = '';
+          NotificationManager.error(data.message, 'Oh snap!', 5000);
+          history.push('/signin');
         }
       });
   }
@@ -78,6 +85,8 @@ class Signin extends Component {
             </div>
           </div>
         </main>
+
+        <NotificationContainer />
       </div>
     );
   }
