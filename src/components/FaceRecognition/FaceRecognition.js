@@ -70,11 +70,12 @@ class FaceRecognition extends Component {
 
   render() {
     const { imageUrl, box } = this.state;
-
+    const { user } = this.props;
+    
     return (
       <div>
         <Logo />
-        <Rank name={this.props.user.name} entries={this.props.user.entries} />
+        <Rank name={user.name} entries={user.entries} />
         <ImageLinkForm 
           onInputChange={this.onInputChange} 
           onButtonSubmit={this.onButtonSubmit} 
