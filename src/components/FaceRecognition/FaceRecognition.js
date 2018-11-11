@@ -42,30 +42,39 @@ class FaceRecognition extends Component {
     this.setState({ box: box });
   }
 
-  onButtonSubmit = () => {
-    this.setState({ imageUrl: this.state.input });
-  
-    app.models
-      .predict(
-        Clarifai.FACE_DETECT_MODEL, 
-        this.state.input
-      )
-      .then(response => this.displayFaceBox(this.calculateFaceLocation(response)))
-      .catch(err => console.log(err));
-
+  updateUserEntries = (id) => {
+    const { loadUser } = this.props;
     fetch('http://localhost:3003/entries', {
-      method: 'put',
+      method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        id: this.props.user.id
+        id: id
       })
     })
       .then(res => res.json())
       .then(data => {
-        if (data.user) {
-          this.props.loadUser(data.user);
-        }
+        if (data.user)
+          loadUser(data.user);
       });
+  }
+
+  onButtonSubmit = () => {
+    this.setState({ imageUrl: this.state.input });
+    
+    const { input } = this.state;
+    const { user } = this.props;
+
+    app
+      .models
+      .predict(Clarifai.FACE_DETECT_MODEL, input)
+        .then(response => {
+          if (response)
+            this.updateUserEntries(user.id);
+          
+          this.displayFaceBox(this.calculateFaceLocation(response));
+        })
+        .catch(err => console.log(err));
+
   }
 
   render() {
