@@ -2,13 +2,10 @@ import React, { Component } from 'react';
 import Rank from '../Rank/Rank';
 import Logo from '../Logo/Logo';
 import ImageLinkForm from '../ImageLinkForm/ImageLinkForm';
-import Clarifai from 'clarifai';
+import ClarifaiService from '../../services/clarifai.service';
+import UserService from '../../services/user.service';
 
 import './faceRecognition.css';
-
-const app = new Clarifai.App({
-  apiKey: 'ec7f6e50d4034297a14c9f4231a0a0b8'
-});
 
 class FaceRecognition extends Component {
   
@@ -44,14 +41,8 @@ class FaceRecognition extends Component {
 
   updateUserEntries = (id) => {
     const { loadUser } = this.props;
-    fetch('http://localhost:3003/entries', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        id: id
-      })
-    })
-      .then(res => res.json())
+    
+    UserService.updateEntries(id)
       .then(data => {
         if (data.user)
           loadUser(data.user);
@@ -64,16 +55,14 @@ class FaceRecognition extends Component {
     const { input } = this.state;
     const { user } = this.props;
 
-    app
-      .models
-      .predict(Clarifai.FACE_DETECT_MODEL, input)
-        .then(response => {
-          if (response)
-            this.updateUserEntries(user.id);
-          
-          this.displayFaceBox(this.calculateFaceLocation(response));
-        })
-        .catch(err => console.log(err));
+    ClarifaiService.getFaceRecognition(input)
+      .then(response => {
+        if (response)
+          this.updateUserEntries(user.id);
+        
+        this.displayFaceBox(this.calculateFaceLocation(response));
+      })
+      .catch(err => console.log(err));
 
   }
 

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { NotificationContainer, NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
+import LoginService from '../../services/login.service';
 
 class Signin extends Component {
   constructor(props) {
@@ -24,15 +25,7 @@ class Signin extends Component {
     const { email, password } = this.state;
     const { onSignIn, loadUser, history } = this.props;
 
-    fetch('http://localhost:3003/signin', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        email: email,
-        password: password
-      })
-    })
-      .then(res => res.json())
+    LoginService.signin(email, password)
       .then(data => {
         if (data.user !== undefined) {
           onSignIn();

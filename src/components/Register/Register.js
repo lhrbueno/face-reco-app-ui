@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import LoginService from '../../services/login.service';
 
 class Register extends Component {
   constructor(props) {
@@ -26,16 +27,7 @@ class Register extends Component {
   onSubmit = () => {
     const { name, email, password } = this.state;
 
-    fetch('http://localhost:3003/register', {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        name: name,
-        email: email,
-        password: password
-      })
-    })
-      .then(res => res.json())
+    LoginService.register(name, email, password)
       .then(data => {
         if (data.user) {
           this.props.loadUser(data.user);
