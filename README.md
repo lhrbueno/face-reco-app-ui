@@ -8,6 +8,7 @@ This project was created using [Create React App](https://github.com/facebook/cr
 2. Run npm install
 3. Run npm start
 
-You must add your own API key in the src/App.js file to connect to Clarifai.
-
-You can grab Clarifai API key [here](https://clarifai.com/)
+#### PS
+* This project uses [face-reco-app](https://github.com/lhrbueno/face-reco-app) 
+* You must add your own API key in the ***src/config/clarifai.config.js*** file to connect to Clarifai.
+* You can grab Clarifai API key [here](https://clarifai.com/)
