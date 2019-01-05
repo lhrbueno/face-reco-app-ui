@@ -1,5 +1,5 @@
 import Clarifai from 'clarifai';
-const _API_KEY = process.env.CLARIFAI_API_KEY;
+const _API_KEY = process.env.REACT_APP_CLARIFAI_API_KEY;
 
 const ClarifaiConfig = {
   app: new Clarifai.App({
